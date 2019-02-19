@@ -46,7 +46,7 @@ module IconGenerator
           raise "The icon must at least be 1024x1024, it currently is #{width}x#{height}." if width.to_i < 1024 || height.to_i < 1024
 
           progress_bar = ProgressBar.create(total: nil)
-    
+
           parallel_processes = options.fetch(:parallel_processes).to_i
           parallel_processes = nil if parallel_processes == -1
           Helpers.generate_icon(

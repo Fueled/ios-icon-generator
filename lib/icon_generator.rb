@@ -22,3 +22,4 @@ module IconGenerator
 end
 
 require 'icon_generator/cli/commands/generate'
+require 'icon_generator/cli/commands/mask'

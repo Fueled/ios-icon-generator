@@ -4,7 +4,7 @@ require 'json'
 require 'base64'
 require 'fileutils'
 
-module IconGenerator
+module IOSIconGenerator
   module Helpers
     def self.mask_icon(
       appiconset_path:,
@@ -55,7 +55,7 @@ module IconGenerator
         icon_output = "#{File.basename(image['filename'], extension)}-#{mask[:suffix]}#{extension}"
         icon_output_path = File.join(output_folder, icon_output)
 
-        command = 
+        command =
           if mask[:file]
             "convert '#{File.join(appiconset_path, image['filename'])}' -strokewidth 0 -fill '#{mask[:background_color]}' -draw \"polyline 0,#{height - mask_size_height} 0,#{height} #{mask_size_width},#{height}\" \\( -background none -density 1536 -resize #{width * mask[:size_offset]}x#{height} \"#{mask[:file]}\" -geometry +#{width * mask[:x_offset]}+#{height * mask[:y_offset]} \\) -gravity southwest -composite '#{icon_output_path}'" # rubocop:disable Metrics/LineLength
           else

@@ -5,10 +5,10 @@ require 'base64'
 require 'colored2'
 require 'parallel'
 require 'ruby-progressbar'
-require 'icon_generator/helpers/mask_icon'
+require 'ios_icon_generator/helpers/mask_icon'
 require 'hanami/cli'
 
-module IconGenerator
+module IOSIconGenerator
   module CLI
     module Commands
       module Build

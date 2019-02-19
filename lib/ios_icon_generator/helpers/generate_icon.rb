@@ -4,7 +4,7 @@ require 'json'
 require 'base64'
 require 'fileutils'
 
-module IconGenerator
+module IOSIconGenerator
   module Helpers
     def self.generate_icon(icon_path:, output_folder:, type:, parallel_processes: nil, progress: nil)
       matches = /(\d+)x(\d+)/.match(`magick identify "#{icon_path}"`)

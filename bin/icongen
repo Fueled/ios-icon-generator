@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'icon_generator'
+require 'ios_icon_generator'
 
 arguments = ARGV
 trace_enabled = arguments.include?('--trace')
 arguments.reject! { |v| v == '--trace' }
 
 begin
-  Hanami::CLI.new(IconGenerator::CLI::Commands).call(arguments: arguments)
+  Hanami::CLI.new(IOSIconGenerator::CLI::Commands).call(arguments: arguments)
 rescue StandardError => e
   raise if trace_enabled
 

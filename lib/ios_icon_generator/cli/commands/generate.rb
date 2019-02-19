@@ -3,11 +3,11 @@
 require 'colored2'
 require 'parallel'
 require 'ruby-progressbar'
-require 'icon_generator/helpers/generate_icon'
-require 'icon_generator/helpers/which'
+require 'ios_icon_generator/helpers/generate_icon'
+require 'ios_icon_generator/helpers/which'
 require 'hanami/cli'
 
-module IconGenerator
+module IOSIconGenerator
   module CLI
     module Commands
       class Generate < Hanami::CLI::Command

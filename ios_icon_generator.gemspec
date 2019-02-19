@@ -2,19 +2,19 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'icon_generator/version'
+require 'ios_icon_generator/version'
 
 Gem::Specification.new do |spec|
-  spec.name = 'icon_generator'
-  spec.version       = IconGenerator::VERSION
+  spec.name = 'ios_icon_generator'
+  spec.version       = IOSIconGenerator::VERSION
   spec.authors       = ['Stéphane Copin']
   spec.email         = ['stephane@fueled.com']
 
   spec.summary       = 'Generates icons based and apply masks to them easily.'
   spec.homepage      = 'https://github.com/Fueled/ios-icon-generator'
 
-  spec.files         = Dir['lib/**/*.rb'] + %w[bin/icon_generator README.md]
-  spec.executables   = %w[icon_generator]
+  spec.files         = Dir['lib/**/*.rb'] + %w[bin/icongen README.md]
+  spec.executables   = %w[icongen]
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'colored2'

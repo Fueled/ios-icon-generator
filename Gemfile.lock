@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    icon_generator (0.1)
+    ios_icon_generator (0.1)
       colored2
       hanami-cli
       parallel
@@ -113,7 +113,7 @@ DEPENDENCIES
   danger
   danger-rubocop
   debase
-  icon_generator!
+  ios_icon_generator!
   pry
   rake (~> 10.0)
   rspec (~> 3.0)

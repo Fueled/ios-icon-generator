@@ -63,9 +63,9 @@ module IOSIconGenerator
         draw_shape =
           case mask[:shape]
           when :triangle
-            "-draw \"polyline 0,#{height - mask_size_height} 0,#{height} #{mask_size_width},#{height}\""
+            "-draw \"polyline 0,#{mask_size_height} 0,#{height} #{width - mask_size_width},#{height}\""
           when :square
-            "-draw \"rectangle -#{width},#{height * 2.0} #{height - mask_size_height},#{mask_size_width}\""
+            "-draw \"rectangle -#{width},#{height * 2.0} #{mask_size_height},#{width - mask_size_width}\""
           else
             raise "Unknown mask shape: #{mask[:shape]}"
           end

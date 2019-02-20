@@ -2,10 +2,11 @@
 
 require 'json'
 require 'base64'
+require 'fileutils'
 
-module IconGenerator
+module IOSIconGenerator
   module Helpers
-    def self.generate_icon(icon_path:, output_folder:, type:, parallel_processes: nil)
+    def self.generate_icon(icon_path:, output_folder:, type:, parallel_processes: nil, progress: nil)
       matches = /(\d+)x(\d+)/.match(`magick identify "#{icon_path}"`)
       raise 'Unable to verify icon. Please make sure it\'s a valid pdf file and try again.' if matches.nil?
 
@@ -52,23 +53,22 @@ module IconGenerator
         smaller_sizes = [[58, 58], [87, 87], [120, 90], [180, 135], [134, 100], [148, 110], [54, 40], [81, 60], [64, 48], [96, 72]]
       end
 
-      progress_bar = ProgressBar.create(
-        total: (smaller_sizes.count + 2) + 2 # +2*count for 1024x1024 icon & Contents json file, +1 for initial icon
-      )
+      total = smaller_sizes.count + 3
+      progress&.call(nil, total)
 
       generate_icon.call(icon_path, 1024, 1024)
-      progress_bar.increment
+      progress&.call(0, total)
 
       max_size = smaller_sizes.flatten.max
       temp_icon_path = File.join(output_folder, '.temp_icon.pdf')
       begin
         system('magick', 'convert', '-density', '400', icon_path, '-colorspace', 'sRGB', '-type', 'truecolor', '-scale', "#{max_size}x#{max_size}", temp_icon_path)
-        progress_bar.increment
+        progress&.call(1, total)
         Parallel.each(
           smaller_sizes,
           in_processes: parallel_processes,
-          finish: lambda do |_item, _i, _result|
-            progress_bar.increment
+          finish: lambda do |_item, i, _result|
+            progress&.call(i + 2, total)
           end
         ) do |width, height|
           generate_icon.call(temp_icon_path, width, height)
@@ -89,6 +89,8 @@ module IconGenerator
           file.write("{\n  \"images\" : [\n    {\n      \"size\" : \"29x29\",\n      \"idiom\" : \"iphone\",\n      \"filename\" : \"App-Icon-58x58.png\",\n      \"scale\" : \"2x\"\n    },\n    {\n      \"size\" : \"29x29\",\n      \"idiom\" : \"iphone\",\n      \"filename\" : \"App-Icon-87x87.png\",\n      \"scale\" : \"3x\"\n    },\n    {\n      \"size\" : \"60x45\",\n      \"idiom\" : \"iphone\",\n      \"filename\" : \"App-Icon-120x90.png\",\n      \"scale\" : \"2x\"\n    },\n    {\n      \"size\" : \"60x45\",\n      \"idiom\" : \"iphone\",\n      \"filename\" : \"App-Icon-180x135.png\",\n      \"scale\" : \"3x\"\n    },\n    {\n      \"size\" : \"29x29\",\n      \"idiom\" : \"ipad\",\n      \"filename\" : \"App-Icon-58x58.png\",\n      \"scale\" : \"2x\"\n    },\n    {\n      \"size\" : \"67x50\",\n      \"idiom\" : \"ipad\",\n      \"filename\" : \"App-Icon-134x100.png\",\n      \"scale\" : \"2x\"\n    },\n    {\n      \"size\" : \"74x55\",\n      \"idiom\" : \"ipad\",\n      \"filename\" : \"App-Icon-148x110.png\",\n      \"scale\" : \"2x\"\n    },\n    {\n      \"size\" : \"1024x1024\",\n      \"idiom\" : \"ios-marketing\",\n      \"filename\" : \"App-Icon-1024x1024.png\",\n      \"scale\" : \"1x\"\n    },\n    {\n      \"size\" : \"27x20\",\n      \"idiom\" : \"universal\",\n      \"filename\" : \"App-Icon-54x40.png\",\n      \"scale\" : \"2x\",\n      \"platform\" : \"ios\"\n    },\n    {\n      \"size\" : \"27x20\",\n      \"idiom\" : \"universal\",\n      \"filename\" : \"App-Icon-81x60.png\",\n      \"scale\" : \"3x\",\n      \"platform\" : \"ios\"\n    },\n    {\n      \"size\" : \"32x24\",\n      \"idiom\" : \"universal\",\n      \"filename\" : \"App-Icon-64x48.png\",\n      \"scale\" : \"2x\",\n      \"platform\" : \"ios\"\n    },\n    {\n      \"size\" : \"32x24\",\n      \"idiom\" : \"universal\",\n      \"filename\" : \"App-Icon-96x72.png\",\n      \"scale\" : \"3x\",\n      \"platform\" : \"ios\"\n    },\n    {\n      \"size\" : \"1024x768\",\n      \"idiom\" : \"ios-marketing\",\n      \"filename\" : \"App-Icon-1024x768.png\",\n      \"scale\" : \"1x\",\n      \"platform\" : \"ios\"\n    }\n  ],\n  \"info\" : {\n    \"version\" : 1,\n    \"author\" : \"xcode\"\n  }\n}") # rubocop:disable Metrics/LineLength
         end
       end
+
+      progress&.call(total - 1, total)
     end
   end
 end

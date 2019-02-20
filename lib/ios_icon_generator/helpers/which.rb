@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module IconGenerator
+module IOSIconGenerator
   module Library
     ##
     # Cross-platform way of finding an executable in the +$PATH+.

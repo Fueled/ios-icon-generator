@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-require 'fileutils'
-require 'base64'
 require 'colored2'
 require 'parallel'
 require 'ruby-progressbar'
-require 'icon_generator/helpers/generate_icon'
-require 'icon_generator/helpers/which'
+require 'ios_icon_generator/helpers/generate_icon'
+require 'ios_icon_generator/helpers/which'
 require 'hanami/cli'
 
-module IconGenerator
+module IOSIconGenerator
   module CLI
     module Commands
       class Generate < Hanami::CLI::Command
@@ -47,9 +45,20 @@ module IconGenerator
 
           raise "The icon must at least be 1024x1024, it currently is #{width}x#{height}." if width.to_i < 1024 || height.to_i < 1024
 
+          progress_bar = ProgressBar.create(total: nil)
+
           parallel_processes = options.fetch(:parallel_processes).to_i
           parallel_processes = nil if parallel_processes == -1
-          Helpers.generate_icon(icon_path: icon_path, output_folder: xcasset_folder, type: type, parallel_processes: parallel_processes)
+          Helpers.generate_icon(
+            icon_path: icon_path,
+            output_folder: xcasset_folder,
+            type: type,
+            parallel_processes: parallel_processes,
+            progress: lambda do |progress, total|
+              progress_bar.total = total unless progress_bar.total
+              progress_bar.increment if progress
+            end
+          )
           puts "\nCompleted!".green
         end
       end

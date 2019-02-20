@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'icon_generator/version'
+require 'ios_icon_generator/version'
 
-RSpec.describe IconGenerator do
+RSpec.describe IOSIconGenerator do
   it 'has a version number' do
-    expect(IconGenerator::VERSION).not_to be nil
+    expect(IOSIconGenerator::VERSION).not_to be nil
   end
 end

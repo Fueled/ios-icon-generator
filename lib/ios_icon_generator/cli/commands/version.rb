@@ -2,13 +2,13 @@
 
 require 'hanami/cli'
 
-module IconGenerator
+module IOSIconGenerator
   module CLI
     module Commands
       class Version < Hanami::CLI::Command
         desc 'Print version'
         def call(*)
-          puts IconGenerator::VERSION
+          puts IOSIconGenerator::VERSION
         end
       end
 

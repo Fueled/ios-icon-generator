@@ -23,11 +23,17 @@ If you wish not to use `sudo` permissions to RubyGems, you can follow the instru
 
 ### Generate App Icon Sets
 
-For now, the CLI supports generating app icon sets for two platforms and one extensions:
+For now, the CLI supports generating app icon sets for all supported platforms:
 
 - iPhone
 - iPad
-- iMessage
+- Apple Watch
+- Mac
+- Carplay
+
+> Please note that the Display P3 is not supported yet
+
+And supports generating sticker packs icons for iMessage apps.
 
 You can specify iPhone and iPad at the same time, however iMessage must be specified on its own.
 
@@ -38,11 +44,11 @@ icongen generate <PDF Base Icon> [XCAsset Folder] --type=<type>
 ```
 
 If the `XCAsset Folder` is not specified, then the current working is assumed to be the output folder.
-The type, if not specified, defaults to `iphone,ipad`.
+The type, if not specified, defaults to `iphone`.
 
-For example, to generate icons for iPhones, and output the app icon set in `Images.xcassets`, run (assuming the path Icon PDF file is also in the current directory and is called `Icon.pdf`):
+For example, to generate icons for iPhones and iPads, and output the images set in `Images.xcassets`, run (assuming the path Icon PDF file is also in the current directory and is called `Icon.pdf`):
 ```bash
-icongen generate Icon.pdf Images.xcassets --type=iphone
+icongen generate Icon.pdf Images.xcassets --type=iphone,ipad
 ```
 
 There are more options to `icongen generate` which you can discover by running `icongen generate --help`.

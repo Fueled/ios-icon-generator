@@ -18,8 +18,11 @@ module IOSIconGenerator
           argument :output_path, default: '.', desc: "The path to your .xcassets folder. \
             If not specified, the appiconsets will be generated in the current folder and can be draged\'n\'dropped there in xcode"
           option :suffix, default: 'Beta', desc: 'The prefix to add to the original app icon set'
-          option :background_color, default: '#AD0000', desc: 'The background color of the mask'
+          option :background_color, default: '#FFFFFF', desc: 'The background color of the mask'
+          option :stroke_color, default: '#000000', desc: 'The stroke color of the mask'
+          option :stroke_width_offset, type: :float, default: 0.01, desc: 'The width of the stroke used when generating the mask\'s background.'
           option :symbol, default: 'b', desc: 'The symbol to use to generate the mask.'
+          option :symbol_color, default: '#7F0000', desc: 'The color of the symbol to use to generate the mask.'
           option :font, default: 'Helvetica', desc: 'The font to use to generate the symbol.'
           option :file, default: nil, desc: 'The path to an image representing the symbol to use to generate the mask.'
           option :x_size_ratio, type: :float, default: 0.5478515625, desc: 'The x offset of the size of the mask.'
@@ -43,8 +46,11 @@ module IOSIconGenerator
               output_folder: output_path,
               mask: {
                 background_color: options.fetch(:background_color),
+                stroke_color: options.fetch(:stroke_color),
+                stroke_width_offset: options.fetch(:stroke_width_offset)&.to_f,
                 suffix: options.fetch(:suffix),
                 symbol: options.fetch(:symbol),
+                symbol_color: options.fetch(:symbol_color),
                 font: options.fetch(:font),
                 file: options[:file],
                 x_size_ratio: options.fetch(:x_size_ratio)&.to_f,

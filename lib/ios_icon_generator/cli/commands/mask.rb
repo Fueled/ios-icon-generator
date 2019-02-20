@@ -27,6 +27,7 @@ module IOSIconGenerator
           option :size_offset, type: :float, default: 0.12, desc: 'The size offset to use when applying the symbol. 0.0 means it\'s scale to the full image, 1.0 means the symbol has the full size of the logo.'
           option :x_offset, type: :float, default: 0.11, desc: 'The x offset to use when applying the symbol. 0.0 means bottom, 1.0 means top.'
           option :y_offset, type: :float, default: 0.11, desc: 'The y offset to use when applying the symbol. 0.0 means left, 1.0 means top.'
+          option :mask_shape, default: 'triangle', desc: 'The shape of the form. Can only be either of \'triangle\' or \'square\'.'
           option :parallel_processes, type: :integer, default: -1, desc: 'Number of processes to use to process the files. Defaults to -1, meaning the number of cores the machine. \
             Set to 0 to disable parallel processing.'
           def call(appiconset_path:, output_path:, **options)
@@ -51,6 +52,7 @@ module IOSIconGenerator
                 size_offset: options.fetch(:size_offset)&.to_f,
                 x_offset: options.fetch(:x_offset)&.to_f,
                 y_offset: options.fetch(:y_offset)&.to_f,
+                shape: options.fetch(:mask_shape)&.to_sym,
               },
               parallel_processes: parallel_processes,
               progress: lambda do |progress, total|

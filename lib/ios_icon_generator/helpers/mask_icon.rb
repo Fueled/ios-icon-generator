@@ -19,6 +19,7 @@ module IOSIconGenerator
         size_offset: 0.0,
         x_offset: 0.0,
         y_offset: 0.0,
+        shape: 'triangle',
       },
       parallel_processes: nil,
       progress: nil
@@ -55,13 +56,23 @@ module IOSIconGenerator
         icon_output = "#{File.basename(image['filename'], extension)}-#{mask[:suffix]}#{extension}"
         icon_output_path = File.join(output_folder, icon_output)
 
-        command =
-          if mask[:file]
-            "convert '#{File.join(appiconset_path, image['filename'])}' -strokewidth 0 -fill '#{mask[:background_color]}' -draw \"polyline 0,#{height - mask_size_height} 0,#{height} #{mask_size_width},#{height}\" \\( -background none -density 1536 -resize #{width * mask[:size_offset]}x#{height} \"#{mask[:file]}\" -geometry +#{width * mask[:x_offset]}+#{height * mask[:y_offset]} \\) -gravity southwest -composite '#{icon_output_path}'" # rubocop:disable Metrics/LineLength
+        draw_shape =
+          case mask[:shape]
+          when :triangle
+            "-strokewidth 0 -fill '#{mask[:background_color]}' -draw \"polyline 0,#{height - mask_size_height} 0,#{height} #{mask_size_width},#{height}\""
+          when :square
+            "-strokewidth 0 -fill '#{mask[:background_color]}' -draw \"rectangle 0,#{height} #{height - mask_size_height},#{mask_size_width}\""
           else
-            "convert '#{File.join(appiconset_path, image['filename'])}' -strokewidth 0 -fill '#{mask[:background_color]}' -draw \"polyline 0,#{height - mask_size_height} 0,#{height} #{mask_size_width},#{height}\" -fill '#FFFFFF' -font '#{mask[:font]}' -pointsize #{height * mask[:size_offset] * 2.0} -annotate +#{width * mask[:x_offset]}+#{height - height * mask[:y_offset]} '#{mask[:symbol]}' '#{icon_output_path}'" # rubocop:disable Metrics/LineLength
+            raise "Unknown mask shape: #{mask[:shape]}"
           end
-        system(command)
+
+        draw_symbol =
+          if mask[:file]
+            "\\( -background none -density 1536 -resize #{width * mask[:size_offset]}x#{height} \"#{mask[:file]}\" -geometry +#{width * mask[:x_offset]}+#{height * mask[:y_offset]} \\) -gravity southwest -composite"
+          else
+            " -fill '#FFFFFF' -font '#{mask[:font]}' -pointsize #{height * mask[:size_offset] * 2.0} -annotate +#{width * mask[:x_offset]}+#{height - height * mask[:y_offset]} '#{mask[:symbol]}'"
+          end
+        system("convert '#{File.join(appiconset_path, image['filename'])}' #{draw_shape} #{draw_symbol} '#{icon_output_path}'")
 
         image['filename'] = icon_output
       end

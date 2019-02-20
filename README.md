@@ -10,6 +10,7 @@ The CLI currently supports 2 commands:
 
 - `generate`: generates an iOS App Icon Set from a base PDF
 - `mask`: generates a new iOS App Icon Sets from a base one, adding a mask at its bottom left which can be customized.
+- `stub`: generates a default iOS App Icon Sets, using a background color, a text and its color.
 
 ### Installation
 
@@ -62,7 +63,7 @@ Into this:
 
 The command used in the example was (it assumes that `AppIcon.appiconset` is the original App Icon Set and is in the current working directory):
 ```bash
-icongen AppIcon.appiconset \
+icongen mask AppIcon.appiconset \
     --mask-shape=square \
     --x-size-ratio=0.30 \
     --y-size-ratio=0.30 \
@@ -78,6 +79,48 @@ icongen AppIcon.appiconset \
 For now, the command only supports adding a mask into the bottom-left corner, but allowing to add it anywhere is definitely a feature we want.
 
 The command supports a lot of customization through options, and you can find more information about each option by typing `icongen mask --help`
+
+### Creating temporary icons
+
+The application also supports creating "temporary" icons, that you would use during development if you don't have an icon yet (for example at project creation). For example, here are some icons created using various commands:
+
+![Icons Example](README_Images/Icons-Example.png)
+
+Here's the command that were run to get each icons above:
+```bash
+#1
+icongen stub \
+    WS \
+    --background-color='#A36AE9' \
+    --stroke-width-offset=0 \
+    --y-offset=-0.04 \
+    --size-offset=0.5 \
+    --symbol-color='#FFFFFF'
+```
+```bash
+#2
+icongen stub \
+    W \
+    --background-color='#3A7D31' \
+    --font=Symbol \
+    --stroke-width-offset=0.01 \
+    --y-offset=-0.07 \
+    --size-offset=0.5 \
+    --symbol-color='#C9C9C9'
+```
+```bash
+#3
+icongen stub \
+    A \
+    --background-color='#000000' \
+    --stroke-width-offset=0.01 \
+    --stroke-color='#FFFFFF' \
+    --font='Arial' \
+    --size-offset=0.5 \
+    --symbol-color='#000000'
+```
+
+The command supports a lot of customization through options, and you can find more information about each option by typing `icongen stub --help`.
 
 ## Development
 

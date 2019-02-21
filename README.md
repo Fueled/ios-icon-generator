@@ -4,6 +4,7 @@ iOS Icon Generator
 [![Build Status](https://app.bitrise.io/app/b23ec2cde834230f/status.svg?token=IBOm9v8claU8aEpmnLMWig)](https://app.bitrise.io/app/b23ec2cde834230f)
 [![Documentation](https://img.shields.io/badge/docs-available-success.svg)](https://fueled.github.io/ios-icon-generator/)
 [![LICENSE](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Version](https://img.shields.io/gem/v/ios_icon_generator.svg)](https://rubygems.org/gems/ios_icon_generator)
 
 ## Usage
 

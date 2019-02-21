@@ -54,7 +54,8 @@ module IOSIconGenerator
       Parallel.each(
         json_content['images'],
         in_processes: parallel_processes,
-        finish: lambda do |_item, i, _result|
+        finish: lambda do |_item, i, result|
+          json_content['images'][i]['filename'] = result
           progress&.call(i, json_content['images'].count)
         end
       ) do |image|
@@ -92,7 +93,7 @@ module IOSIconGenerator
           end
         system("convert '#{File.join(appiconset_path, image['filename'])}' #{draw_shape_parameters} #{draw_shape} #{draw_symbol} '#{icon_output_path}'")
 
-        image['filename'] = icon_output
+        next icon_output
       end
 
       File.write(File.join(output_folder, 'Contents.json'), JSON.pretty_generate(json_content))

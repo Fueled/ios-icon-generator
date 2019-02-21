@@ -13,10 +13,12 @@ Gem::Specification.new do |spec|
   spec.summary       = 'Generates icons based and apply masks to them easily.'
   spec.homepage      = 'https://github.com/Fueled/ios-icon-generator'
 
-  spec.files         = Dir['lib/**/*.rb'] + Dir['vendor/**/*.json'] + %w[bin/icongen LICENSE README.md]
+  spec.files         = Dir['lib/**/*.rb'] + Dir['vendor/**/*.json'] + %w[bin/icongen LICENSE README.md .yardopts]
   spec.license       = 'Apache-2.0'
   spec.executables   = %w[icongen]
   spec.require_paths = ['lib']
+
+  spec.metadata['yard.run'] = 'yri'
 
   spec.add_runtime_dependency 'colored2'
   spec.add_runtime_dependency 'hanami-cli'

@@ -57,13 +57,156 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'><h1>ios-icon-generator</h1>
+      <div id="content"><div id='filecontents'><h1>iOS Icon Generator</h1>
 
-<p>A terminal tool that allows to generate an icon based from a 1024x1024 PDF file.</p>
+<p><a href="https://app.bitrise.io/app/b23ec2cde834230f"><img src="https://app.bitrise.io/app/b23ec2cde834230f/status.svg?token=IBOm9v8claU8aEpmnLMWig" alt="Build Status"></a>
+<a href="https://fueled.github.io/ios-icon-generator/"><img src="https://img.shields.io/badge/docs-available-success.svg" alt="Documentation"></a>
+<a href="http://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="LICENSE"></a></p>
+
+<h2>Usage</h2>
+
+<p>The CLI currently supports 2 commands:</p>
+
+<ul>
+<li><code>generate</code>: generates an iOS App Icon Set from a base PDF</li>
+<li><code>mask</code>: generates a new iOS App Icon Sets from a base one, adding a mask at its bottom left which can be customized.</li>
+<li><code>stub</code>: generates a default iOS App Icon Sets, using a background color, a text and its color.</li>
+</ul>
+
+<h3>Installation</h3>
+
+<p>iOS Icon Generator is built using Ruby, and can be installed using its default local installation in your terminal via:</p>
+
+<pre class="code bash"><code class="bash">sudo gem install ios_icon_generator
+</code></pre>
+
+<p>If you wish not to use <code>sudo</code> permissions to RubyGems, you can follow the instructions of the <code>CocoaPods</code> guys <a href="https://guides.cocoapods.org/using/getting-started.html#getting-started">here</a>, by replacing all <code>cocoapods</code> with <code>ios_icon_generator</code> in the shell commands.</p>
+
+<h3>Generate App Icon Sets</h3>
+
+<p>For now, the CLI supports generating app icon sets for all supported platforms:</p>
+
+<ul>
+<li>iPhone</li>
+<li>iPad</li>
+<li>Apple Watch</li>
+<li>Mac</li>
+<li>Carplay</li>
+</ul>
+
+<blockquote>
+<p>Please note that the Display P3 color space is not supported yet</p>
+</blockquote>
+
+<p>And supports generating sticker packs icons for iMessage apps.</p>
+
+<p>You can specify iPhone and iPad at the same time, however iMessage must be specified on its own.</p>
+
+<p>The base syntax of the command is:</p>
+
+<pre class="code bash"><code class="bash">icongen generate &lt;PDF Base Icon&gt; [XCAsset Folder] --type=&lt;type&gt;
+</code></pre>
+
+<p>If the <code>XCAsset Folder</code> is not specified, then the current working is assumed to be the output folder.
+The type, if not specified, defaults to <code>iphone</code>.</p>
+
+<p>For example, to generate icons for iPhones and iPads, and output the images set in <code>Images.xcassets</code>, run (assuming the path Icon PDF file is also in the current directory and is called <code>Icon.pdf</code>):</p>
+
+<pre class="code bash"><code class="bash">icongen generate Icon.pdf Images.xcassets --type=iphone,ipad
+</code></pre>
+
+<p>There are more options to <code>icongen generate</code> which you can discover by running <code>icongen generate --help</code>.</p>
+
+<h3>Masking Existing App Icon Sets</h3>
+
+<p>The application also supports &quot;masking&quot; app icons, adding a small mask at the bottom-left corner of the icons, allowing for example to convert the following icons:
+<img src="README_Images/Mask-Before.png" alt="Before Example">
+Into this:
+<img src="README_Images/Mask-After.png" alt="Before Example"></p>
+
+<p>The command used in the example was (it assumes that <code>AppIcon.appiconset</code> is the original App Icon Set and is in the current working directory):</p>
+
+<pre class="code bash"><code class="bash">icongen mask AppIcon.appiconset \
+    --mask-shape=square \
+    --x-size-ratio=0.30 \
+    --y-size-ratio=0.30 \
+    --size-offset=0.11 \
+    --x-offset=0.1 \
+    --y-offset=0.1 \
+    --background-color=&#39;#A36AE9&#39; \
+    --stroke-width-offset=0 \
+    --font=Symbol \
+    --symbol-color=&#39;#FFFFFF&#39;
+</code></pre>
+
+<p>For now, the command only supports adding a mask into the bottom-left corner, but allowing to add it anywhere is definitely a feature we want.</p>
+
+<p>The command supports a lot of customization through options, and you can find more information about each option by typing <code>icongen mask --help</code></p>
+
+<h3>Creating temporary icons</h3>
+
+<p>The application also supports creating &quot;temporary&quot; icons, that you would use during development if you don&#39;t have an icon yet (for example at project creation). For example, here are some icons created using various commands:</p>
+
+<p><img src="README_Images/Icons-Example.png" alt="Icons Example"></p>
+
+<p>Here&#39;s the command that were run to get each icons above:</p>
+
+<pre class="code bash"><code class="bash">#1
+icongen stub \
+    WS \
+    --background-color=&#39;#A36AE9&#39; \
+    --stroke-width-offset=0 \
+    --y-offset=-0.04 \
+    --size-offset=0.5 \
+    --symbol-color=&#39;#FFFFFF&#39;
+</code></pre>
+
+<pre class="code bash"><code class="bash">#2
+icongen stub \
+    W \
+    --background-color=&#39;#3A7D31&#39; \
+    --font=Symbol \
+    --stroke-width-offset=0.01 \
+    --y-offset=-0.07 \
+    --size-offset=0.5 \
+    --symbol-color=&#39;#C9C9C9&#39;
+</code></pre>
+
+<pre class="code bash"><code class="bash">#3
+icongen stub \
+    A \
+    --background-color=&#39;#000000&#39; \
+    --stroke-width-offset=0.01 \
+    --stroke-color=&#39;#FFFFFF&#39; \
+    --font=&#39;Arial&#39; \
+    --size-offset=0.5 \
+    --symbol-color=&#39;#000000&#39;
+</code></pre>
+
+<p>The command supports a lot of customization through options, and you can find more information about each option by typing <code>icongen stub --help</code>.</p>
+
+<h2>Development</h2>
+
+<h3>Set Up</h3>
+
+<p>To set you up for developing on driveshaft, first make sure the repository is cloned and you&#39;re in its root folder, and then run the following:</p>
+
+<pre class="code bash"><code class="bash">echo &quot;BUNDLE_GEMFILE=\&quot;`pwd`/Gemfile\&quot; bundler exec ruby \&quot;`pwd`/bin/icongen\&quot; \&quot;\${@---help}\&quot;&quot; &gt; /usr/local/bin/icongen-dev
+chmod +x /usr/local/bin/icongen-dev
+</code></pre>
+
+<p>All you&#39;ll be all set!
+To run the development version of <code>icongen</code> from anywhere, just run <code>icongen-dev</code> rather than <code>icongen</code>.<br>
+You can then proceed on developing locally on the ios-icon-generator repository, and create a PR whenever a new piece of code is ready to be reviewed and integrated!</p>
+
+<p>To run the test suite, you may run the following command from the root folder:</p>
+
+<pre class="code bash"><code class="bash">bundler exec ruby bin/rspec -I .
+</code></pre>
 </div></div>
 
       <div id="footer">
-  Generated on Tue Feb 19 16:25:40 2019 by
+  Generated on Thu Feb 21 14:26:30 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.18 (ruby-2.3.7).
 </div>

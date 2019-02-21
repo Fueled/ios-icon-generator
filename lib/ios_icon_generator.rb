@@ -21,8 +21,10 @@ require 'hanami/cli'
 
 # The IOSIconGenerator module
 module IOSIconGenerator
+  # @private
   # :nodoc:
   module CLI
+    # @private
     # :nodoc:
     module Commands
       extend Hanami::CLI::Registry

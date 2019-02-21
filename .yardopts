@@ -1,1 +1,4 @@
 --output-dir docs
+--readme README.md
+--no-private
+lib/ios_icon_generator/version.rb lib/ios_icon_generator.rb lib/ios_icon_generator/helpers/**/*.rb

@@ -78,7 +78,7 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ios_icon_generator/helpers/which.rb</dd>
+    <dd>ios_icon_generator/helpers/which.rb</dd>
   </dl>
   
 </div>
@@ -148,21 +148,49 @@
 <p>From <a
 href="http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-program-exists-in-path-from-ruby">stackoverflow.com/questions/2108727/which-in-ruby-checking-if-program-exists-in-path-from-ruby</a></p>
 
-<h2 id="label-Parameters-3A">Parameters:</h2>
-<dl class="rdoc-list note-list"><dt><code>cmd</code>
-<dd>
-<p>The name of the command to search the path for.</p>
-</dd></dl>
-
-<h2 id="label-Returns-3A">Returns:</h2>
-
-<p>The full path to the command if found, and <code>nil</code> otherwise.</p>
-
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>cmd</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The name of the command to search the path for.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>
+<p>The full path to the command if found, and <code>nil</code> otherwise.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -170,19 +198,19 @@ href="http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-progr
       <pre class="lines">
 
 
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25</pre>
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ios_icon_generator/helpers/which.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'ios_icon_generator/helpers/which.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_which'>which</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_exts'>exts</span> <span class='op'>=</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>PATHEXT</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>?</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>PATHEXT</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
@@ -204,7 +232,7 @@ href="http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-progr
 </div>
 
       <div id="footer">
-  Generated on Tue Feb 19 16:25:40 2019 by
+  Generated on Thu Feb 21 12:37:08 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.18 (ruby-2.3.7).
 </div>

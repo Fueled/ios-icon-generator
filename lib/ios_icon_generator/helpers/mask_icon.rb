@@ -107,7 +107,9 @@ module IOSIconGenerator
         icon_output = "#{File.basename(image['filename'], extension)}-#{mask[:suffix]}#{extension}"
         icon_output_path = File.join(output_folder, icon_output)
 
-        draw_shape_parameters = "-strokewidth '#{(mask[:stroke_width_offset] || 0) * [width, height].min}' -stroke '#{mask[:stroke_width_offset].zero? ? 'none' : (mask[:stroke_color] || '#000000')}' -fill '#{mask[:background_color] || '#FFFFFF'}'"
+        draw_shape_parameters = "-strokewidth '#{(mask[:stroke_width_offset] || 0) * [width, height].min}' \
+          -stroke '#{mask[:stroke_width_offset].zero? ? 'none' : (mask[:stroke_color] || '#000000')}' \
+          -fill '#{mask[:background_color] || '#FFFFFF'}'"
         draw_shape =
           case mask[:shape]
           when :triangle
@@ -120,9 +122,20 @@ module IOSIconGenerator
 
         draw_symbol =
           if mask[:file]
-            "\\( -background none -density 1536 -resize #{width * mask[:size_offset]}x#{height} \"#{mask[:file]}\" -geometry +#{width * mask[:x_offset]}+#{height * mask[:y_offset]} \\) -gravity southwest -composite"
+            "\\( -background none \
+              -density 1536 \
+              -resize #{width * mask[:size_offset]}x#{height} \
+              \"#{mask[:file]}\" \
+              -geometry +#{width * mask[:x_offset]}+#{height * mask[:y_offset]} \\) \
+              -gravity southwest \
+              -composite"
           else
-            "-strokewidth 0 -stroke none -fill '#{mask[:symbol_color] || '#7F0000'}' -font '#{mask[:font]}' -pointsize #{height * mask[:size_offset] * 2.0} -annotate +#{width * mask[:x_offset]}+#{height - height * mask[:y_offset]} '#{mask[:symbol]}'"
+            "-strokewidth 0 \
+              -stroke none \
+              -fill '#{mask[:symbol_color] || '#7F0000'}' \
+              -font '#{mask[:font]}' \
+              -pointsize #{height * mask[:size_offset] * 2.0} \
+              -annotate +#{width * mask[:x_offset]}+#{height - height * mask[:y_offset]} '#{mask[:symbol]}'"
           end
         system("convert '#{File.join(appiconset_path, image['filename'])}' #{draw_shape_parameters} #{draw_shape} #{draw_symbol} '#{icon_output_path}'")
 

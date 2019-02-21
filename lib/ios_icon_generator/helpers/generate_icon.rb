@@ -130,7 +130,7 @@ module IOSIconGenerator
         },
       }
 
-      File.write(File.join(appiconset_path, 'Contents.json'), JSON.generate(contents_json))
+      File.write(File.join(appiconset_path, 'Contents.json'), JSON.pretty_generate(contents_json))
 
       progress&.call(total - 1, total)
     end

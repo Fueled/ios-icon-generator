@@ -95,7 +95,7 @@ module IOSIconGenerator
         image['filename'] = icon_output
       end
 
-      File.write(File.join(output_folder, 'Contents.json'), JSON.generate(json_content))
+      File.write(File.join(output_folder, 'Contents.json'), JSON.pretty_generate(json_content))
     end
   end
 end

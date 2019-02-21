@@ -34,10 +34,10 @@ module IOSIconGenerator
         option :font, default: 'Helvetica', desc: 'The font to use to generate the symbol.'
         option :symbol_color, default: '#7F0000', desc: 'The color of the symbol to use to generate the mask.'
         option :stroke_color, default: '#000000', desc: 'The stroke color of the mask'
-        option :stroke_width_offset, type: :float, default: 0.1, desc: 'The width of the stroke used when generating the symbol.'
+        option :stroke_width_offset, type: :float, default: 0.0, desc: 'The width of the stroke used when generating the symbol.'
         option :size_offset, type: :float, default: 0.5, desc: 'The point size used for the symbol, relative to the height of the icon. Values over 0.5 are not recommended.'
         option :x_offset, type: :float, default: 0.0, desc: 'The x offset to use when applying the symbol. 0.0 means bottom, 1.0 means top.'
-        option :y_offset, type: :float, default: 0.0, desc: 'The y offset to use when applying the symbol. 0.0 means left, 1.0 means top.'
+        option :y_offset, type: :float, default: -0.05, desc: 'The y offset to use when applying the symbol. 0.0 means left, 1.0 means top.'
         option :type, type: :array, default: %w[iphone], desc: 'Which target to generate the icons for. Can be "iphone", "ipad", "watch", "mac" or "carplay" or a combination of any of them, or "imessage"'
         option :parallel_processes, type: :integer, default: -1, desc: 'Number of processes to use to process the files. Defaults to -1, meaning the number of cores the machine. \
           Set to 0 to disable parallel processing.'

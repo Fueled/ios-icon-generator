@@ -40,3 +40,4 @@ end
 require 'ios_icon_generator/cli/commands/generate'
 require 'ios_icon_generator/cli/commands/mask'
 require 'ios_icon_generator/cli/commands/stub'
+require 'ios_icon_generator/cli/commands/version'

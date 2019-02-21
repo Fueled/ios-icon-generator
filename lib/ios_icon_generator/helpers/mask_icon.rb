@@ -20,6 +20,39 @@ require 'fileutils'
 
 module IOSIconGenerator
   module Helpers
+    ##
+    # Mask an icon using the parameters provided.
+    #
+    # The mask is for now always generated in the bottom left corner of the image.
+    #
+    # @param [String, #read] appiconset_path The path of the original app icon set to use to generate the new one.
+    # @param [String, #read] output_folder The folder to create the new app icon set in.
+    # @param [Hash<String, Object>, #read] mask A hash representing parameters for creating the mask.
+    #        The Hash may contain the following values:
+    #        - +background_color+: The background color to use when generating the mask
+    #        - +stroke_color+: The stroke color to use when generating the mask. Used for the outline of the mask.
+    #        - +stroke_width_offset+: The stroke width of the mask, offset to the image's minimum dimension (width or height).
+    #          1.0 means the stroke will have the full width/height of the image
+    #        - +suffix+: The suffix to use when generating the new mask
+    #        - +file+: The file to use when generating the new mask. This file should be an image, and it will be overlayed over the background.
+    #        - +symbol+: The symbol to use when generating the new mask
+    #        - +symbol_color+: The color to use for the symbol
+    #        - +font+: The font to use for the symbol
+    #        - +x_size_ratio+: The size ratio (of the width of the image) to use when generating the mask. 1.0 means the full width, 0.5 means half-width.
+    #        - +y_size_ratio+: The size ratio (of the height of the image) to use when generating the mask. 1.0 means the full height, 0.5 means half-height.
+    #        - +size_offset+: The size ratio (of the width and height) to use when generating the symbol or file. 1.0 means the full width and height, 0.5 means half-width and half-height.
+    #        - +x_offset+: The X offset (of the width of the image) to use when generating the symbol or file. 1.0 means the full width, 0.5 means half-width.
+    #        - +y_offset+: The Y offset (of the width of the image) to use when generating the symbol or file. 1.0 means the full height, 0.5 means half-height.
+    #        - +shape+: The shape to use when generating the mask. Can be either +:triangle+ or +:square+.
+    # @param [Symbol, #read] parallel_processes The number of processes to use when generating the icons.
+    #        +nil+ means it'll use as many processes as they are cores on the machine.
+    #        +0+ will disables spawning any processes.
+    # @param [Lambda(progress [Int], total [Int]), #read] progress An optional progress block called when progress has been made generating the icons.
+    #        It should take two parameters:
+    #        - +progress+: An integer indicating the current progress out of +total+
+    #        - +total+: An integer indicating the total progress
+    #
+    # @return [String] Return the path to the generated app icon set.
     def self.mask_icon(
       appiconset_path:,
       output_folder:,
@@ -54,7 +87,8 @@ module IOSIconGenerator
       Parallel.each(
         json_content['images'],
         in_processes: parallel_processes,
-        finish: lambda do |_item, i, _result|
+        finish: lambda do |_item, i, result|
+          json_content['images'][i]['filename'] = result
           progress&.call(i, json_content['images'].count)
         end
       ) do |image|
@@ -73,7 +107,9 @@ module IOSIconGenerator
         icon_output = "#{File.basename(image['filename'], extension)}-#{mask[:suffix]}#{extension}"
         icon_output_path = File.join(output_folder, icon_output)
 
-        draw_shape_parameters = "-strokewidth '#{(mask[:stroke_width_offset] || 0) * [width, height].min}' -stroke '#{mask[:stroke_width_offset].zero? ? 'none' : (mask[:stroke_color] || '#000000')}' -fill '#{mask[:background_color] || '#FFFFFF'}'"
+        draw_shape_parameters = "-strokewidth '#{(mask[:stroke_width_offset] || 0) * [width, height].min}' \
+          -stroke '#{mask[:stroke_width_offset].zero? ? 'none' : (mask[:stroke_color] || '#000000')}' \
+          -fill '#{mask[:background_color] || '#FFFFFF'}'"
         draw_shape =
           case mask[:shape]
           when :triangle
@@ -86,16 +122,29 @@ module IOSIconGenerator
 
         draw_symbol =
           if mask[:file]
-            "\\( -background none -density 1536 -resize #{width * mask[:size_offset]}x#{height} \"#{mask[:file]}\" -geometry +#{width * mask[:x_offset]}+#{height * mask[:y_offset]} \\) -gravity southwest -composite"
+            "\\( -background none \
+              -density 1536 \
+              -resize #{width * mask[:size_offset]}x#{height} \
+              \"#{mask[:file]}\" \
+              -geometry +#{width * mask[:x_offset]}+#{height * mask[:y_offset]} \\) \
+              -gravity southwest \
+              -composite"
           else
-            "-strokewidth 0 -stroke none -fill '#{mask[:symbol_color] || '#7F0000'}' -font '#{mask[:font]}' -pointsize #{height * mask[:size_offset] * 2.0} -annotate +#{width * mask[:x_offset]}+#{height - height * mask[:y_offset]} '#{mask[:symbol]}'"
+            "-strokewidth 0 \
+              -stroke none \
+              -fill '#{mask[:symbol_color] || '#7F0000'}' \
+              -font '#{mask[:font]}' \
+              -pointsize #{height * mask[:size_offset] * 2.0} \
+              -annotate +#{width * mask[:x_offset]}+#{height - height * mask[:y_offset]} '#{mask[:symbol]}'"
           end
         system("convert '#{File.join(appiconset_path, image['filename'])}' #{draw_shape_parameters} #{draw_shape} #{draw_symbol} '#{icon_output_path}'")
 
-        image['filename'] = icon_output
+        next icon_output
       end
 
       File.write(File.join(output_folder, 'Contents.json'), JSON.pretty_generate(json_content))
+
+      output_folder
     end
   end
 end

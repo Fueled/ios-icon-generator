@@ -21,8 +21,10 @@ require 'hanami/cli'
 
 # The IOSIconGenerator module
 module IOSIconGenerator
+  # @private
   # :nodoc:
   module CLI
+    # @private
     # :nodoc:
     module Commands
       extend Hanami::CLI::Registry
@@ -38,3 +40,4 @@ end
 require 'ios_icon_generator/cli/commands/generate'
 require 'ios_icon_generator/cli/commands/mask'
 require 'ios_icon_generator/cli/commands/stub'
+require 'ios_icon_generator/cli/commands/version'

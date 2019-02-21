@@ -33,7 +33,7 @@ For now, the CLI supports generating app icon sets for all supported platforms:
 - Mac
 - Carplay
 
-> Please note that the Display P3 is not supported yet
+> Please note that the Display P3 color space is not supported yet
 
 And supports generating sticker packs icons for iMessage apps.
 

@@ -15,18 +15,15 @@
 # limitations under the License.
 
 module IOSIconGenerator
-  module Library
+  module Helpers
     ##
     # Cross-platform way of finding an executable in the +$PATH+.
     #
     # From http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-program-exists-in-path-from-ruby
     #
-    # == Parameters:
-    # +cmd+::
-    #   The name of the command to search the path for.
+    # @param cmd [String] The name of the command to search the path for.
     #
-    # == Returns:
-    # The full path to the command if found, and +nil+ otherwise.
+    # @return [String] The full path to the command if found, and +nil+ otherwise.
     def self.which(cmd)
       exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
       ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|

@@ -31,8 +31,8 @@ module IOSIconGenerator
         symbol: 'b',
         symbol_color: '#7F0000',
         font: 'Helvetica',
-        x_size_ratio: 0.5478515625,
-        y_size_ratio: 0.5478515625,
+        x_size_ratio: 0.54,
+        y_size_ratio: 0.54,
         size_offset: 0.0,
         x_offset: 0.0,
         y_offset: 0.0,
@@ -77,7 +77,7 @@ module IOSIconGenerator
         draw_shape =
           case mask[:shape]
           when :triangle
-            "-draw \"polyline 0,#{mask_size_height} 0,#{height} #{width - mask_size_width},#{height}\""
+            "-draw \"polyline -#{width},#{height - mask_size_height} 0,#{height - mask_size_height} #{mask_size_width},#{height} #{mask_size_width},#{height * 2.0} -#{width},#{height * 2.0}\""
           when :square
             "-draw \"rectangle -#{width},#{height * 2.0} #{mask_size_height},#{width - mask_size_width}\""
           else

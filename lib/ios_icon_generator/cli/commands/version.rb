@@ -26,7 +26,7 @@ module IOSIconGenerator
         end
       end
 
-      register 'version', Version, aliases: ['v', '-v', '--version']
+      register 'version', Commands::Version, aliases: ['v', '-v', '--version']
     end
   end
 end

@@ -5,6 +5,7 @@ iOS Icon Generator
 [![Documentation](https://img.shields.io/badge/docs-available-success.svg)](https://fueled.github.io/ios-icon-generator/)
 [![LICENSE](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Version](https://img.shields.io/gem/v/ios_icon_generator.svg)](https://rubygems.org/gems/ios_icon_generator)
+[![codecov](https://codecov.io/gh/Fueled/ios-icon-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/Fueled/ios-icon-generator)
 
 ## Usage
 
@@ -23,6 +24,12 @@ sudo gem install ios_icon_generator
 ```
 
 If you wish not to use `sudo` permissions to RubyGems, you can follow the instructions of the `CocoaPods` guys [here](https://guides.cocoapods.org/using/getting-started.html#getting-started), by replacing all `cocoapods` with `ios_icon_generator` in the shell commands.
+
+It requires [`imagemagick`](http://www.imagemagick.org/), which can be installed using Homebrew:
+
+```bash
+brew install imagemagick
+```
 
 ### Generate App Icon Sets
 
@@ -139,7 +146,12 @@ All you'll be all set!
 To run the development version of `icongen` from anywhere, just run `icongen-dev` rather than `icongen`.  
 You can then proceed on developing locally on the ios-icon-generator repository, and create a PR whenever a new piece of code is ready to be reviewed and integrated!
 
-To run the test suite, you may run the following command from the root folder:
+To be able to run the test suite, the dependencies `libpng` and `libjpeg` are required (on top of `imagemagick`) to be installed. You can install them via `homebrew`:
 ```bash
-bundler exec ruby bin/rspec -I .
+brew install libpng libjpeg
+```
+
+You may then execute the following command to run the test suite:
+```bash
+bundler exec rake
 ```

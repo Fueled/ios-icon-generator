@@ -48,7 +48,7 @@ module IOSIconGenerator
     # @return [String] Return the path to the generated app icon set.
     def self.generate_icon(icon_path:, output_folder:, types:, parallel_processes: nil, generate_icon: nil, progress: nil)
       if icon_path
-        raise 'There is no icon at the path specified.' unless File.exist?(icon_path)
+        raise "There is no icon at #{icon_path}." unless File.exist?(icon_path)
 
         raise 'The icon specified must be .pdf.' if File.extname(icon_path) != '.pdf'
 

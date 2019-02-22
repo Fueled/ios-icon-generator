@@ -14,16 +14,53 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'simplecov'
+require 'simplecov-console'
+
+formatters = [
+  SimpleCov::Formatter::Console,
+  SimpleCov::Formatter::HTMLFormatter,
+]
+
+if ENV['CI'] == 'true'
+  require 'codecov'
+  formatters << SimpleCov::Formatter::Codecov
+end
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
+
+SimpleCov.start do
+  add_filter %r{^/spec/}
+end
+
 require 'bundler/setup'
+require 'aruba/rspec'
+require 'ios_icon_generator/cli/runner'
 
 RSpec.configure do |config|
-  # Enable flags like --only-failures and --next-failure
+  config.include Aruba::Api
+
   config.example_status_persistence_file_path = '.rspec_status'
 
-  # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
 
-  config.expect_with :rspec do |c|
-    c.syntax = :expect
+  config.expect_with :rspec do |config|
+    config.syntax = :expect
+  end
+
+  config.before :each do
+    setup_aruba
   end
 end
+
+Aruba.configure do |config|
+  config.exit_timeout = 120.0
+  config.io_wait_timeout = 1.0
+  config.command_launcher = :in_process
+  config.main_class = IOSIconGenerator::CLI::Runner
+end
+
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+
+::Dir.glob(::File.expand_path('../support/*.rb', __FILE__)).each { |f| require_relative f }
+::Dir.glob(::File.expand_path('../support/**/*.rb', __FILE__)).each { |f| require_relative f }

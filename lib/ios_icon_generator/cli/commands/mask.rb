@@ -49,6 +49,7 @@ module IOSIconGenerator
             Set to 0 to disable parallel processing.'
           def call(appiconset_path:, output_path:, **options)
             raise "#{'ImageMagick'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install imagemagick'.blue.bold.underlined}" unless Helpers.which('magick')
+            raise "#{'GhostScript'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install ghostscript'.blue.bold.underlined}" unless Helpers.which('gs')
 
             raise 'There is no App icon set at the path specified.' unless Dir.exist?(appiconset_path)
 

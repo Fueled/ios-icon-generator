@@ -34,6 +34,7 @@ module IOSIconGenerator
           Set to 0 to disable parallel processing.'
         def call(icon_path:, xcasset_folder:, type:, **options)
           raise "#{'ImageMagick'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install imagemagick'.blue.bold.underlined}" unless Helpers.which('magick')
+          raise "#{'GhostScript'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install ghostscript'.blue.bold.underlined}" unless Helpers.which('gs')
 
           types = type.map(&:to_sym)
 

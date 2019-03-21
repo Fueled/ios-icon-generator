@@ -8,6 +8,7 @@
 /tmp/
 .bitrise-steps
 /.vscode
+/spec/resources/generated
 
 # rspec failure tracking
 .rspec_status

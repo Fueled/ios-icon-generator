@@ -84,7 +84,7 @@ module IOSIconGenerator
               progress_bar.increment if progress
             end
           )
-          puts "\nCompleted!".green
+          puts 'Completed!'.green
         end
       end
 

@@ -20,6 +20,7 @@ require 'colored2'
 require 'parallel'
 require 'ruby-progressbar'
 require 'ios_icon_generator/helpers/mask_icon'
+require 'ios_icon_generator/helpers/check_dependencies'
 require 'hanami/cli'
 
 module IOSIconGenerator
@@ -48,8 +49,7 @@ module IOSIconGenerator
           option :parallel_processes, type: :integer, default: -1, desc: 'Number of processes to use to process the files. Defaults to -1, meaning the number of cores the machine. \
             Set to 0 to disable parallel processing.'
           def call(appiconset_path:, output_path:, **options)
-            raise "#{'ImageMagick'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install imagemagick'.blue.bold.underlined}" unless Helpers.which('magick')
-            raise "#{'GhostScript'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install ghostscript'.blue.bold.underlined}" unless Helpers.which('gs')
+            Helpers.check_dependencies
 
             raise 'There is no App icon set at the path specified.' unless Dir.exist?(appiconset_path)
 

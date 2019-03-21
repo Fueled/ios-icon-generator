@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ios_icon_generator (0.1.1)
+    ios_icon_generator (0.1.2)
       colored2
       hanami-cli
       parallel

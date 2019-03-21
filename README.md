@@ -25,10 +25,10 @@ sudo gem install ios_icon_generator
 
 If you wish not to use `sudo` permissions to RubyGems, you can follow the instructions of the `CocoaPods` guys [here](https://guides.cocoapods.org/using/getting-started.html#getting-started), by replacing all `cocoapods` with `ios_icon_generator` in the shell commands.
 
-It requires [`imagemagick`](http://www.imagemagick.org/), which can be installed using Homebrew:
+It requires both [`imagemagick`](http://www.imagemagick.org/) and [`ghostscript`](https://www.ghostscript.com/), both can be installed using Homebrew:
 
 ```bash
-brew install imagemagick
+brew install imagemagick ghostscript
 ```
 
 ### Generate App Icon Sets

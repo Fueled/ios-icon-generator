@@ -17,6 +17,7 @@
 require 'json'
 require 'fileutils'
 require 'ios_icon_generator/helpers/image_sets_definition'
+require 'ios_icon_generator/helpers/check_dependencies'
 
 module IOSIconGenerator
   module Helpers
@@ -47,10 +48,12 @@ module IOSIconGenerator
     #
     # @return [String] Return the path to the generated app icon set.
     def self.generate_icon(icon_path:, output_folder:, types:, parallel_processes: nil, generate_icon: nil, progress: nil)
+      is_pdf = icon_path && File.extname(icon_path) == '.pdf'
+
+      Helpers.check_dependencies(requires_ghostscript: is_pdf)
+
       if icon_path
         raise "There is no icon at #{icon_path}." unless File.exist?(icon_path)
-
-        is_pdf = File.extname(icon_path) == '.pdf'
 
         matches = /(\d+)x(\d+)/.match(`magick identify "#{icon_path}"`)
         raise 'Unable to verify icon. Please make sure it\'s a valid image file and try again.' if matches.nil?
@@ -61,9 +64,8 @@ module IOSIconGenerator
         raise "The icon must at least be 1024x1024, it currently is #{width}x#{height}." unless width.to_i >= 1024 && height.to_i >= 1024
       elsif generate_icon.nil?
         raise 'icon_path has been set to nil, generate_icon must be specified'
-      else
-        is_pdf = false
       end
+
       appiconset_path = File.join(output_folder, "#{types.include?(:imessage) ? 'iMessage App Icon' : 'AppIcon'}.#{types.include?(:imessage) ? 'stickersiconset' : 'appiconset'}")
 
       FileUtils.mkdir_p(appiconset_path)

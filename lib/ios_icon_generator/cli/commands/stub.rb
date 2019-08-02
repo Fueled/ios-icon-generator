@@ -42,8 +42,6 @@ module IOSIconGenerator
         option :parallel_processes, type: :integer, default: -1, desc: 'Number of processes to use to process the files. Defaults to -1, meaning the number of cores the machine. \
           Set to 0 to disable parallel processing.'
         def call(text:, xcasset_folder:, type:, **options)
-          Helpers.check_dependencies
-
           types = type.map(&:to_sym)
 
           progress_bar = ProgressBar.create(total: nil)

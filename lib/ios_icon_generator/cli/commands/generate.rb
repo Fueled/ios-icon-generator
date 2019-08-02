@@ -26,7 +26,7 @@ module IOSIconGenerator
     module Commands
       class Generate < Hanami::CLI::Command
         desc 'Generate app icons'
-        argument :icon_path, required: true, desc: 'The unmasked pdf icon. The icon must be at least 1024x1024'
+        argument :icon_path, required: true, desc: 'The unmasked icon. The icon must be at least 1024x1024.'
         argument :xcasset_folder, default: '.', desc: "The path to your .xcassets folder. \
           If not specified, the appiconsets will be generated in the current folder and can be draged\'n\'dropped there in xcode"
         option :type, type: :array, default: %w[iphone], desc: 'Which target to generate the icons for. Can be "iphone", "ipad", "watch", "mac" or "carplay" or a combination of any of them, or "imessage"'

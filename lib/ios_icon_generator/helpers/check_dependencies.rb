@@ -18,9 +18,10 @@ require 'ios_icon_generator/helpers/which'
 
 module IOSIconGenerator
   module Helpers
-    def self.check_dependencies
+    def self.check_dependencies(requires_ghostscript: false)
       raise "#{'ImageMagick'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install imagemagick'.blue.bold.underlined}" unless Helpers.which('magick')
-      raise "#{'GhostScript'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install ghostscript'.blue.bold.underlined}" unless Helpers.which('gs')
+      raise "#{'GhostScript'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install ghostscript'.blue.bold.underlined}" \
+        if requires_ghostscript && !Helpers.which('gs')
     end
   end
 end

@@ -18,7 +18,6 @@ require 'colored2'
 require 'parallel'
 require 'ruby-progressbar'
 require 'ios_icon_generator/helpers/generate_icon'
-require 'ios_icon_generator/helpers/check_dependencies'
 require 'hanami/cli'
 
 module IOSIconGenerator
@@ -26,18 +25,13 @@ module IOSIconGenerator
     module Commands
       class Generate < Hanami::CLI::Command
         desc 'Generate app icons'
-        argument :icon_path, required: true, desc: 'The unmasked pdf icon. The icon must be at least 1024x1024'
+        argument :icon_path, required: true, desc: 'The unmasked icon of any image file type. The icon must be at least 1024x1024.'
         argument :xcasset_folder, default: '.', desc: "The path to your .xcassets folder. \
           If not specified, the appiconsets will be generated in the current folder and can be draged\'n\'dropped there in xcode"
         option :type, type: :array, default: %w[iphone], desc: 'Which target to generate the icons for. Can be "iphone", "ipad", "watch", "mac" or "carplay" or a combination of any of them, or "imessage"'
         option :parallel_processes, type: :integer, default: -1, desc: 'Number of processes to use to process the files. Defaults to -1, meaning the number of cores the machine. \
           Set to 0 to disable parallel processing.'
         def call(icon_path:, xcasset_folder:, type:, **options)
-          Helpers.check_dependencies
-
-          raise "#{'ImageMagick'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install imagemagick'.blue.bold.underlined}" unless Helpers.which('magick')
-          raise "#{'GhostScript'.blue.bold} is required. It can be installed via #{'homebrew'.bold.underlined} using #{'brew install ghostscript'.blue.bold.underlined}" unless Helpers.which('gs')
-
           types = type.map(&:to_sym)
 
           progress_bar = ProgressBar.create(total: nil)

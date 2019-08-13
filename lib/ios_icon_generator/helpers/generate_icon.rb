@@ -17,6 +17,7 @@
 require 'json'
 require 'fileutils'
 require 'ios_icon_generator/helpers/image_sets_definition'
+require 'ios_icon_generator/helpers/check_dependencies'
 
 module IOSIconGenerator
   module Helpers
@@ -26,7 +27,7 @@ module IOSIconGenerator
     # If +icon_path+ is set to +nil+, the function expects +generate_icon+ to be set or the function will raise.
     #
     # @param [String, #read] icon_path The path to the icon to use as the base icon.
-    #        If specified, it must point to a valid pdf file (with a .pdf extension), with a resolution over 1024x1024.
+    #        If specified, it must point to a valid image file, with a resolution over 1024x1024 when applicable.
     #        If not specified, +generate_icon+ must be specified.
     # @param [String, #read] output_folder The folder to create the app icon set in.
     # @param [Array<Symbol>, #read] types The types to generate the sets of images for. Each type must be one of +:iphone+, +:ipad+, +:watch+, +mac+ or +carplay+, or it can be an array of just +:imessage+.
@@ -47,21 +48,24 @@ module IOSIconGenerator
     #
     # @return [String] Return the path to the generated app icon set.
     def self.generate_icon(icon_path:, output_folder:, types:, parallel_processes: nil, generate_icon: nil, progress: nil)
+      is_pdf = icon_path && File.extname(icon_path) == '.pdf'
+
+      Helpers.check_dependencies(requires_ghostscript: is_pdf)
+
       if icon_path
         raise "There is no icon at #{icon_path}." unless File.exist?(icon_path)
 
-        raise 'The icon specified must be .pdf.' if File.extname(icon_path) != '.pdf'
-
         matches = /(\d+)x(\d+)/.match(`magick identify "#{icon_path}"`)
-        raise 'Unable to verify icon. Please make sure it\'s a valid pdf file and try again.' if matches.nil?
+        raise 'Unable to verify icon. Please make sure it\'s a valid image file and try again.' if matches.nil?
 
         width, height = matches.captures
-        raise 'Invalid pdf specified.' if width.nil? || height.nil?
+        raise 'Invalid image specified.' if width.nil? || height.nil?
 
         raise "The icon must at least be 1024x1024, it currently is #{width}x#{height}." unless width.to_i >= 1024 && height.to_i >= 1024
       elsif generate_icon.nil?
         raise 'icon_path has been set to nil, generate_icon must be specified'
       end
+
       appiconset_path = File.join(output_folder, "#{types.include?(:imessage) ? 'iMessage App Icon' : 'AppIcon'}.#{types.include?(:imessage) ? 'stickersiconset' : 'appiconset'}")
 
       FileUtils.mkdir_p(appiconset_path)
@@ -128,7 +132,7 @@ module IOSIconGenerator
       progress&.call(nil, total)
 
       max_size = smaller_sizes.flatten.max
-      temp_icon_path = File.join(output_folder, '.temp_icon.pdf')
+      temp_icon_path = File.join(output_folder, ".temp_icon#{is_pdf ? '.pdf' : '.png'}")
       begin
         system('magick', 'convert', '-density', '400', icon_path, '-colorspace', 'sRGB', '-type', 'truecolor', '-scale', "#{max_size}x#{max_size}", temp_icon_path) if icon_path
         progress&.call(1, total)

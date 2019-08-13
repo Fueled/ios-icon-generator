@@ -17,6 +17,7 @@
 require 'json'
 require 'base64'
 require 'fileutils'
+require 'ios_icon_generator/helpers/check_dependencies'
 
 module IOSIconGenerator
   module Helpers
@@ -74,6 +75,8 @@ module IOSIconGenerator
       parallel_processes: nil,
       progress: nil
     )
+      Helpers.check_dependencies
+
       extension = File.extname(appiconset_path)
       output_folder = File.join(output_folder, "#{File.basename(appiconset_path, extension)}-#{mask[:suffix]}#{extension}")
 

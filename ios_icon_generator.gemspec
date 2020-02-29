@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'debase', '= 0.2.2'
   spec.add_development_dependency 'phashion'
   spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop', '~> 0.64.0'
   spec.add_development_dependency 'ruby-debug-ide', '= 0.6.1'

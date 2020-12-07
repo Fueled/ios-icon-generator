@@ -82,10 +82,12 @@ module IOSIconGenerator
           '-density',
           '400',
           base_path,
+          '-channel',
+          'rgba',
+          '-alpha',
+          'on',
           '-colorspace',
           'sRGB',
-          '-type',
-          'truecolor',
           '-resize', "#{size}x#{size}",
           '-gravity',
           'center',
@@ -134,7 +136,22 @@ module IOSIconGenerator
       max_size = smaller_sizes.flatten.max
       temp_icon_path = File.join(output_folder, ".temp_icon#{is_pdf ? '.pdf' : '.png'}")
       begin
-        system('magick', 'convert', '-density', '400', icon_path, '-colorspace', 'sRGB', '-type', 'truecolor', '-scale', "#{max_size}x#{max_size}", temp_icon_path) if icon_path
+        system(
+          'magick',
+          'convert',
+          '-density',
+          '400',
+          icon_path,
+          '-colorspace',
+          'sRGB',
+          '-channel',
+          'rgba',
+          '-alpha',
+          'on',
+          '-scale',
+          "#{max_size}x#{max_size}",
+          temp_icon_path
+        ) if icon_path
         progress&.call(1, total)
         Parallel.each(
           smaller_sizes,

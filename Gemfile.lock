@@ -10,8 +10,8 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.6.0)
-      public_suffix (>= 2.0.2, < 4.0)
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     ansi (1.5.0)
     aruba (0.14.11)
       childprocess (>= 0.6.3, < 3.0.0)
@@ -113,7 +113,7 @@ GEM
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    public_suffix (3.1.1)
+    public_suffix (4.0.7)
     rainbow (3.0.0)
     rake (10.5.0)
     rspec (3.8.0)

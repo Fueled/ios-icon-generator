@@ -27,7 +27,7 @@ module IOSIconGenerator
     # @private
     # :nodoc:
     module Commands
-      extend Hanami::CLI::Registry
+      extend Dry::CLI::Registry
     end
   end
 

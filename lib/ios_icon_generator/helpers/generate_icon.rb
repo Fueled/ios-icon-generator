@@ -18,9 +18,40 @@ require 'json'
 require 'fileutils'
 require 'ios_icon_generator/helpers/image_sets_definition'
 require 'ios_icon_generator/helpers/check_dependencies'
+require 'ios_icon_generator/helpers/execute'
+require 'open3'
 
 module IOSIconGenerator
   module Helpers
+    # The smallest source icon Xcode's asset catalogue needs, in pixels.
+    MINIMUM_ICON_SIZE = 1024
+    # The DPI vector sources are rasterised at.
+    RENDER_DENSITY = 400
+    # PDF page dimensions are reported in points, of which there are 72 per inch.
+    POINTS_PER_INCH = 72
+
+    ##
+    # Read the pixel dimensions of an image's first frame.
+    #
+    # Uses +-format+ rather than parsing the default +identify+ output, which
+    # leads with the file name: the dimensions in an icon called
+    # +logo-512x512.png+ would otherwise be read out of its name.
+    #
+    # @param [String, #read] path The path to the image.
+    #
+    # @raise [RuntimeError] If the file cannot be read as an image.
+    #
+    # @return [Array<Integer>] The width and height, in pixels.
+    def self.image_dimensions(path)
+      output, status = Open3.capture2('magick', 'identify', '-format', '%w %h', "#{path}[0]")
+      raise 'Unable to verify icon. Please make sure it\'s a valid image file and try again.' unless status.success?
+
+      width, height = output.split.map(&:to_i)
+      raise 'Invalid image specified.' if width.nil? || height.nil? || width.zero? || height.zero?
+
+      [width, height]
+    end
+
     ##
     # Generate an icon using the base icon provided.
     #
@@ -55,13 +86,23 @@ module IOSIconGenerator
       if icon_path
         raise "There is no icon at #{icon_path}." unless File.exist?(icon_path)
 
-        matches = /(\d+)x(\d+)/.match(`magick identify "#{icon_path}"`)
-        raise 'Unable to verify icon. Please make sure it\'s a valid image file and try again.' if matches.nil?
+        width, height = Helpers.image_dimensions(icon_path)
 
-        width, height = matches.captures
-        raise 'Invalid image specified.' if width.nil? || height.nil?
+        # A PDF is a vector source: `identify` reports its page size in points,
+        # and it gets rasterised at RENDER_DENSITY below. Compare the size it
+        # will actually render at, not its nominal page size.
+        if is_pdf
+          scale = RENDER_DENSITY.to_f / POINTS_PER_INCH
+          rendered_width = (width * scale).floor
+          rendered_height = (height * scale).floor
 
-        raise "The icon must at least be 1024x1024, it currently is #{width}x#{height}." unless width.to_i >= 1024 && height.to_i >= 1024
+          unless rendered_width >= MINIMUM_ICON_SIZE && rendered_height >= MINIMUM_ICON_SIZE
+            raise "The icon must at least be #{MINIMUM_ICON_SIZE}x#{MINIMUM_ICON_SIZE}. " \
+                  "This PDF is #{width}x#{height} points, which renders to only #{rendered_width}x#{rendered_height} at #{RENDER_DENSITY} DPI."
+          end
+        elsif !(width >= MINIMUM_ICON_SIZE && height >= MINIMUM_ICON_SIZE)
+          raise "The icon must at least be #{MINIMUM_ICON_SIZE}x#{MINIMUM_ICON_SIZE}, it currently is #{width}x#{height}."
+        end
       elsif generate_icon.nil?
         raise 'icon_path has been set to nil, generate_icon must be specified'
       end
@@ -76,11 +117,11 @@ module IOSIconGenerator
 
       generate_icon ||= lambda { |base_path, target_path, width, height|
         size = [width, height].max
-        system(
+        Helpers.execute(
           'magick',
           'convert',
           '-density',
-          '400',
+          RENDER_DENSITY.to_s,
           base_path,
           '-colorspace',
           'sRGB',
@@ -134,7 +175,7 @@ module IOSIconGenerator
       max_size = smaller_sizes.flatten.max
       temp_icon_path = File.join(output_folder, ".temp_icon#{is_pdf ? '.pdf' : '.png'}")
       begin
-        system('magick', 'convert', '-density', '400', icon_path, '-colorspace', 'sRGB', '-type', 'truecolor', '-scale', "#{max_size}x#{max_size}", temp_icon_path) if icon_path
+        Helpers.execute('magick', 'convert', '-density', RENDER_DENSITY.to_s, icon_path, '-colorspace', 'sRGB', '-type', 'truecolor', '-scale', "#{max_size}x#{max_size}", temp_icon_path) if icon_path
         progress&.call(1, total)
         Parallel.each(
           smaller_sizes,

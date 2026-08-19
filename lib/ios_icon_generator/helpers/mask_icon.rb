@@ -18,6 +18,7 @@ require 'json'
 require 'base64'
 require 'fileutils'
 require 'ios_icon_generator/helpers/check_dependencies'
+require 'ios_icon_generator/helpers/execute'
 
 module IOSIconGenerator
   module Helpers
@@ -140,7 +141,7 @@ module IOSIconGenerator
               -pointsize #{height * mask[:size_offset] * 2.0} \
               -annotate +#{width * mask[:x_offset]}+#{height - height * mask[:y_offset]} '#{mask[:symbol]}'"
           end
-        system("convert '#{File.join(appiconset_path, image['filename'])}' #{draw_shape_parameters} #{draw_shape} #{draw_symbol} '#{icon_output_path}'")
+        Helpers.execute("convert '#{File.join(appiconset_path, image['filename'])}' #{draw_shape_parameters} #{draw_shape} #{draw_symbol} '#{icon_output_path}'")
 
         next icon_output
       end

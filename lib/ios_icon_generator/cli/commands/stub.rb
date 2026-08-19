@@ -19,6 +19,7 @@ require 'parallel'
 require 'ruby-progressbar'
 require 'ios_icon_generator/helpers/generate_icon'
 require 'ios_icon_generator/helpers/check_dependencies'
+require 'ios_icon_generator/helpers/execute'
 require 'dry/cli'
 
 module IOSIconGenerator
@@ -54,7 +55,7 @@ module IOSIconGenerator
             types: types,
             parallel_processes: parallel_processes,
             generate_icon: lambda do |_base_path, target_path, width, height|
-              system(
+              Helpers.execute(
                 'magick',
                 '-size',
                 "#{width}x#{height}",

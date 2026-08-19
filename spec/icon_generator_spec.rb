@@ -15,11 +15,27 @@
 # limitations under the License.
 
 require 'spec_helper.rb'
+require 'aruba/rspec'
 require 'phashion'
 require 'fileutils'
 require 'json'
 
 resources_path = File.expand_path(File.join(File.dirname(__FILE__), 'resources'))
+
+RSpec.configure do |config|
+  config.include Aruba::Api
+
+  config.before :each do
+    setup_aruba
+  end
+end
+
+Aruba.configure do |config|
+  config.exit_timeout = 120.0
+  config.io_wait_timeout = 1.0
+  config.command_launcher = :in_process
+  config.main_class = IOSIconGenerator::CLI::Runner
+end
 
 RSpec.shared_examples :icon_generation_examples do |command, parameter, options = nil, result_folder = nil|
   it('executes successfully') do

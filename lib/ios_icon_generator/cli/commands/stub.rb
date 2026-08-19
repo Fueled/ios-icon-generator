@@ -19,12 +19,12 @@ require 'parallel'
 require 'ruby-progressbar'
 require 'ios_icon_generator/helpers/generate_icon'
 require 'ios_icon_generator/helpers/check_dependencies'
-require 'hanami/cli'
+require 'dry/cli'
 
 module IOSIconGenerator
   module CLI
     module Commands
-      class Stub < Hanami::CLI::Command
+      class Stub < Dry::CLI::Command
         desc 'Generate stub app icons'
         argument :text, required: true, desc: 'The text to use when generating the icon.'
         argument :xcasset_folder, default: '.', desc: "The path to your .xcassets folder. \

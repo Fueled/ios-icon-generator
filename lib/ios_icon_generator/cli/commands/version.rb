@@ -14,12 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'hanami/cli'
+require 'dry/cli'
 
 module IOSIconGenerator
   module CLI
     module Commands
-      class Version < Hanami::CLI::Command
+      class Version < Dry::CLI::Command
         desc 'Print version'
         def call(*)
           puts IOSIconGenerator::VERSION

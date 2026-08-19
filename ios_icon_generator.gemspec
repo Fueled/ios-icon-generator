@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.metadata['yard.run'] = 'yri'
 
   spec.add_runtime_dependency 'colored2'
-  spec.add_runtime_dependency 'hanami-cli'
+  spec.add_runtime_dependency 'dry-cli'
   spec.add_runtime_dependency 'parallel'
   spec.add_runtime_dependency 'ruby-progressbar'
   spec.add_development_dependency 'aruba'

@@ -17,7 +17,7 @@
 require 'ios_icon_generator/version'
 require 'rubygems'
 require 'colored2'
-require 'hanami/cli'
+require 'dry/cli'
 
 # The IOSIconGenerator module
 module IOSIconGenerator
@@ -27,7 +27,7 @@ module IOSIconGenerator
     # @private
     # :nodoc:
     module Commands
-      extend Hanami::CLI::Registry
+      extend Dry::CLI::Registry
     end
   end
 

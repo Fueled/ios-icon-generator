@@ -34,12 +34,9 @@ SimpleCov.start do
 end
 
 require 'bundler/setup'
-require 'aruba/rspec'
 require 'ios_icon_generator/cli/runner'
 
 RSpec.configure do |config|
-  config.include Aruba::Api
-
   config.example_status_persistence_file_path = '.rspec_status'
 
   config.disable_monkey_patching!
@@ -47,17 +44,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |config|
     config.syntax = :expect
   end
-
-  config.before :each do
-    setup_aruba
-  end
-end
-
-Aruba.configure do |config|
-  config.exit_timeout = 120.0
-  config.io_wait_timeout = 1.0
-  config.command_launcher = :in_process
-  config.main_class = IOSIconGenerator::CLI::Runner
 end
 
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)

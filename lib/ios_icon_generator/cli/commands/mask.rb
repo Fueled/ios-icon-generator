@@ -21,13 +21,13 @@ require 'parallel'
 require 'ruby-progressbar'
 require 'ios_icon_generator/helpers/mask_icon'
 require 'ios_icon_generator/helpers/check_dependencies'
-require 'hanami/cli'
+require 'dry/cli'
 
 module IOSIconGenerator
   module CLI
     module Commands
       module Build
-        class Icon < Hanami::CLI::Command
+        class Icon < Dry::CLI::Command
           desc 'Generate app icons'
           argument :appiconset_path, required: true, desc: 'The unmasked pdf icon. The icon must be at least 1024x1024'
           argument :output_path, default: '.', desc: "The path to your .xcassets folder. \

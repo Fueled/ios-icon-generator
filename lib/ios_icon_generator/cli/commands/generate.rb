@@ -18,12 +18,12 @@ require 'colored2'
 require 'parallel'
 require 'ruby-progressbar'
 require 'ios_icon_generator/helpers/generate_icon'
-require 'hanami/cli'
+require 'dry/cli'
 
 module IOSIconGenerator
   module CLI
     module Commands
-      class Generate < Hanami::CLI::Command
+      class Generate < Dry::CLI::Command
         desc 'Generate app icons'
         argument :icon_path, required: true, desc: 'The unmasked icon of any image file type. The icon must be at least 1024x1024.'
         argument :xcasset_folder, default: '.', desc: "The path to your .xcassets folder. \

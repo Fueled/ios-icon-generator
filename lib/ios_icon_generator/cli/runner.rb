@@ -37,7 +37,7 @@ module IOSIconGenerator
             $stdin = @stdin
             $stdout = @stdout
 
-            Hanami::CLI.new(IOSIconGenerator::CLI::Commands).call(arguments: @argv)
+            Dry::CLI.new(IOSIconGenerator::CLI::Commands).call(arguments: @argv)
 
             0
           rescue StandardError => e
